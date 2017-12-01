@@ -110,7 +110,7 @@ class FXOS8700:
         # Read an 8-bit unsigned value from the specified 8-bit address.
         with self._device:
             self._BUFFER[0] = address & 0xFF
-            self._device.write(self._BUFFER, end=1)
+            self._device.write(self._BUFFER, end=1, stop=False)
             self._device.readinto(self._BUFFER, end=1)
         return self._BUFFER[0]
 
@@ -132,7 +132,7 @@ class FXOS8700:
         # Read 13 bytes from the sensor.
         with self._device:
             self._BUFFER[0] = _FXOS8700_REGISTER_STATUS | 0x80
-            self._device.write(self._BUFFER, end=1)
+            self._device.write(self._BUFFER, end=1, stop=False)
             self._device.readinto(self._BUFFER)
         # Parse out the accelerometer and magnetometer data.
         status = self._BUFFER[0]
