@@ -31,6 +31,8 @@ See examples/simpletest.py for a demo of the usage.
 
 * Author(s): Tony DiCola
 """
+import ustruct
+
 import adafruit_bus_device.i2c_device as i2c_device
 
 
@@ -73,6 +75,15 @@ ACCEL_RANGE_4G                    = 0x01
 ACCEL_RANGE_8G                    = 0x02
 
 
+def _twos_comp(val, bits):
+    # Convert an unsigned integer in 2's compliment form of the specified bit
+    # length to its signed integer value and return it.
+    if val & (1 << (bits - 1)) != 0:
+        return val - (1 << bits)
+    else:
+        return val
+
+
 class FXOS8700:
 
     # Class-level buffer for reading and writing data with the sensor.
@@ -108,54 +119,49 @@ class FXOS8700:
 
     def _read_u8(self, address):
         # Read an 8-bit unsigned value from the specified 8-bit address.
-        with self._device:
+        with self._device as i2c:
             self._BUFFER[0] = address & 0xFF
-            self._device.write(self._BUFFER, end=1, stop=False)
-            self._device.readinto(self._BUFFER, end=1)
+            i2c.write(self._BUFFER, end=1, stop=False)
+            i2c.readinto(self._BUFFER, end=1)
         return self._BUFFER[0]
 
     def _write_u8(self, address, val):
         # Write an 8-bit unsigned value to the specified 8-bit address.
-        with self._device:
+        with self._device as i2c:
             self._BUFFER[0] = address & 0xFF
             self._BUFFER[1] = val & 0xFF
-            self._device.write(self._BUFFER, end=2)
+            i2c.write(self._BUFFER, end=2)
 
     def read_raw_accel_mag(self):
         """Read the raw accelerometer and magnetometer readings.  Returns a
         2-tuple of 3-tuples:
-          - Accelerometer X, Y, Z axis 14-bit unsigned raw values
-          - Magnetometer X, Y, Z axis 16-bit unsigned raw values
+          - Accelerometer X, Y, Z axis 14-bit signed raw values
+          - Magnetometer X, Y, Z axis 16-bit signed raw values
         If you want the acceleration or magnetometer values in friendly units
         consider using the accelerometer and magnetometer properties!
         """
-        # Read 13 bytes from the sensor.
-        with self._device:
-            self._BUFFER[0] = _FXOS8700_REGISTER_STATUS | 0x80
-            self._device.write(self._BUFFER, end=1, stop=False)
-            self._device.readinto(self._BUFFER)
-        # Parse out the accelerometer and magnetometer data.
-        status = self._BUFFER[0]
-        axhi   = self._BUFFER[1]
-        axlo   = self._BUFFER[2]
-        ayhi   = self._BUFFER[3]
-        aylo   = self._BUFFER[4]
-        azhi   = self._BUFFER[5]
-        azlo   = self._BUFFER[6]
-        mxhi   = self._BUFFER[7]
-        mxlo   = self._BUFFER[8]
-        myhi   = self._BUFFER[9]
-        mylo   = self._BUFFER[10]
-        mzhi   = self._BUFFER[11]
-        mzlo   = self._BUFFER[12]
-        # Shift values to create properly formed integers
-        # Note, accel data is 14-bit and left-aligned, so we shift two bit right
-        accel_raw_x = (((axhi << 8) | axlo) >> 2) & 0xFFFF
-        accel_raw_y = (((ayhi << 8) | aylo) >> 2) & 0xFFFF
-        accel_raw_z = (((azhi << 8) | azlo) >> 2) & 0xFFFF
-        mag_raw_x = ((mxhi << 8) | mxlo) & 0xFFFF
-        mag_raw_y = ((myhi << 8) | mylo) & 0xFFFF
-        mag_raw_z = ((mzhi << 8) | mzlo) & 0xFFFF
+        # Read accelerometer data from sensor.
+        with self._device as i2c:
+            self._BUFFER[0] = _FXOS8700_REGISTER_OUT_X_MSB
+            i2c.write(self._BUFFER, end=1, stop=False)
+            i2c.readinto(self._BUFFER, end=6)
+        accel_raw_x = ustruct.unpack_from('>H', self._BUFFER[0:2])[0]
+        accel_raw_y = ustruct.unpack_from('>H', self._BUFFER[2:4])[0]
+        accel_raw_z = ustruct.unpack_from('>H', self._BUFFER[4:6])[0]
+        # Convert accelerometer data to signed 14-bit value from 16-bit
+        # left aligned 2's compliment value.
+        accel_raw_x = _twos_comp(accel_raw_x >> 2, 14)
+        accel_raw_y = _twos_comp(accel_raw_y >> 2, 14)
+        accel_raw_z = _twos_comp(accel_raw_z >> 2, 14)
+        # Read magnetometer data from sensor.  No need to convert as this is
+        # 16-bit signed data so struct parsing can handle it directly.
+        with self._device as i2c:
+            self._BUFFER[0] = _FXOS8700_REGISTER_MOUT_X_MSB
+            i2c.write(self._BUFFER, end=1, stop=False)
+            i2c.readinto(self._BUFFER, end=6)
+        mag_raw_x = ustruct.unpack_from('>h', self._BUFFER[0:2])[0]
+        mag_raw_y = ustruct.unpack_from('>h', self._BUFFER[2:4])[0]
+        mag_raw_z = ustruct.unpack_from('>h', self._BUFFER[4:6])[0]
         return ((accel_raw_x, accel_raw_y, accel_raw_z),
                 (mag_raw_x, mag_raw_y, mag_raw_z))
 
