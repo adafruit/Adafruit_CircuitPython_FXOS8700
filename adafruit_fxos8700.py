@@ -39,7 +39,7 @@ from micropython import const
 # Register addresses and other constants:
 # pylint: disable=bad-whitespace
 _FXOS8700_ADDRESS               = const(0x1F)   # 0011111
-_FXOS8700_ID                    = const(0xC7)        # 1100 0111
+_FXOS8700_ID                    = const(0xC7)   # 1100 0111
 _FXOS8700_REGISTER_STATUS       = const(0x00)
 _FXOS8700_REGISTER_OUT_X_MSB    = const(0x01)
 _FXOS8700_REGISTER_OUT_X_LSB    = const(0x02)
@@ -47,7 +47,7 @@ _FXOS8700_REGISTER_OUT_Y_MSB    = const(0x03)
 _FXOS8700_REGISTER_OUT_Y_LSB    = const(0x04)
 _FXOS8700_REGISTER_OUT_Z_MSB    = const(0x05)
 _FXOS8700_REGISTER_OUT_Z_LSB    = const(0x06)
-_FXOS8700_REGISTER_WHO_AM_I     = const(0x0D)    # 11000111   r
+_FXOS8700_REGISTER_WHO_AM_I     = const(0x0D)   # 11000111   r
 _FXOS8700_REGISTER_XYZ_DATA_CFG = const(0x0E)
 _FXOS8700_REGISTER_CTRL_REG1    = const(0x2A)   # 00000000   r/w
 _FXOS8700_REGISTER_CTRL_REG2    = const(0x2B)   # 00000000   r/w
