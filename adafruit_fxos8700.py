@@ -31,7 +31,10 @@ See examples/simpletest.py for a demo of the usage.
 
 * Author(s): Tony DiCola
 """
-import ustruct
+try:
+    import ustruct as struct
+except ImportError:
+    import struct
 
 import adafruit_bus_device.i2c_device as i2c_device
 from micropython import const
@@ -146,9 +149,9 @@ class FXOS8700:
             self._BUFFER[0] = _FXOS8700_REGISTER_OUT_X_MSB
             i2c.write(self._BUFFER, end=1, stop=False)
             i2c.readinto(self._BUFFER, end=6)
-        accel_raw_x = ustruct.unpack_from('>H', self._BUFFER[0:2])[0]
-        accel_raw_y = ustruct.unpack_from('>H', self._BUFFER[2:4])[0]
-        accel_raw_z = ustruct.unpack_from('>H', self._BUFFER[4:6])[0]
+        accel_raw_x = struct.unpack_from('>H', self._BUFFER[0:2])[0]
+        accel_raw_y = struct.unpack_from('>H', self._BUFFER[2:4])[0]
+        accel_raw_z = struct.unpack_from('>H', self._BUFFER[4:6])[0]
         # Convert accelerometer data to signed 14-bit value from 16-bit
         # left aligned 2's compliment value.
         accel_raw_x = _twos_comp(accel_raw_x >> 2, 14)
@@ -160,16 +163,12 @@ class FXOS8700:
             self._BUFFER[0] = _FXOS8700_REGISTER_MOUT_X_MSB
             i2c.write(self._BUFFER, end=1, stop=False)
             i2c.readinto(self._BUFFER, end=6)
-        mag_raw_x = ustruct.unpack_from('>h', self._BUFFER[0:2])[0]
-        mag_raw_y = ustruct.unpack_from('>h', self._BUFFER[2:4])[0]
-        mag_raw_z = ustruct.unpack_from('>h', self._BUFFER[4:6])[0]
+        mag_raw_x = struct.unpack_from('>h', self._BUFFER[0:2])[0]
+        mag_raw_y = struct.unpack_from('>h', self._BUFFER[2:4])[0]
+        mag_raw_z = struct.unpack_from('>h', self._BUFFER[4:6])[0]
         return ((accel_raw_x, accel_raw_y, accel_raw_z),
                 (mag_raw_x, mag_raw_y, mag_raw_z))
 
-    # pylint is confused and incorrectly marking this function as bad return
-    # types.  Perhaps it doesn't understand map returns an iterable value.
-    # Disable the warning.
-    # pylint: disable=inconsistent-return-statements
     @property
     def accelerometer(self):
         """Read the acceleration from the accelerometer and return its X, Y, Z axis values as a
@@ -177,16 +176,14 @@ class FXOS8700:
         """
         accel_raw, _ = self.read_raw_accel_mag()
         # Convert accel values to m/s^2
+        factor = 0
         if self._accel_range == ACCEL_RANGE_2G:
-            return map(lambda x: x * _ACCEL_MG_LSB_2G * _SENSORS_GRAVITY_STANDARD,
-                       accel_raw)
+            factor = _ACCEL_MG_LSB_2G
         elif self._accel_range == ACCEL_RANGE_4G:
-            return map(lambda x: x * _ACCEL_MG_LSB_4G * _SENSORS_GRAVITY_STANDARD,
-                       accel_raw)
+            factor = _ACCEL_MG_LSB_4G
         elif self._accel_range == ACCEL_RANGE_8G:
-            return map(lambda x: x * _ACCEL_MG_LSB_8G * _SENSORS_GRAVITY_STANDARD,
-                       accel_raw)
-    # pylint: enable=inconsistent-return-statements
+            factor = _ACCEL_MG_LSB_8G
+        return [x * factor * _SENSORS_GRAVITY_STANDARD for x in accel_raw]
 
     @property
     def magnetometer(self):
@@ -194,4 +191,4 @@ class FXOS8700:
         """
         _, mag_raw = self.read_raw_accel_mag()
         # Convert mag values to uTesla
-        return map(lambda x: x * _MAG_UT_LSB, mag_raw)
+        return [x * _MAG_UT_LSB for x in mag_raw]
