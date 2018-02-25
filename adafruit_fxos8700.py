@@ -153,8 +153,10 @@ class FXOS8700:
     def read_raw_accel_mag(self):
         """Read the raw accelerometer and magnetometer readings.  Returns a
         2-tuple of 3-tuples:
-          - Accelerometer X, Y, Z axis 14-bit signed raw values
-          - Magnetometer X, Y, Z axis 16-bit signed raw values
+
+        - Accelerometer X, Y, Z axis 14-bit signed raw values
+        - Magnetometer X, Y, Z axis 16-bit signed raw values
+
         If you want the acceleration or magnetometer values in friendly units
         consider using the accelerometer and magnetometer properties!
         """
