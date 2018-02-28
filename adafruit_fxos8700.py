@@ -24,12 +24,26 @@
 ====================================================
 
 CircuitPython module for the NXP FXOS8700 accelerometer and magnetometer.
-Based on the driver from:
-  https://github.com/adafruit/Adafruit_FXOS8700
+Based on the driver from: https://github.com/adafruit/Adafruit_FXOS8700
 
 See examples/simpletest.py for a demo of the usage.
 
 * Author(s): Tony DiCola
+
+Implementation Notes
+--------------------
+
+**Hardware:**
+
+*  Adafruit `Precision NXP 9-DOF Breakout Board - FXOS8700 + FXAS21002
+   <https://www.adafruit.com/product/3463>`_ (Product ID: 3463)
+
+**Software and Dependencies:**
+
+* Adafruit CircuitPython firmware (2.2.0+) for the ESP8622 and M0-based boards:
+  https://github.com/adafruit/circuitpython/releases
+
+* Adafruit's Bus Device library: https://github.com/adafruit/Adafruit_CircuitPython_BusDevice
 """
 try:
     import ustruct as struct
@@ -139,8 +153,10 @@ class FXOS8700:
     def read_raw_accel_mag(self):
         """Read the raw accelerometer and magnetometer readings.  Returns a
         2-tuple of 3-tuples:
-          - Accelerometer X, Y, Z axis 14-bit signed raw values
-          - Magnetometer X, Y, Z axis 16-bit signed raw values
+
+        - Accelerometer X, Y, Z axis 14-bit signed raw values
+        - Magnetometer X, Y, Z axis 16-bit signed raw values
+
         If you want the acceleration or magnetometer values in friendly units
         consider using the accelerometer and magnetometer properties!
         """
