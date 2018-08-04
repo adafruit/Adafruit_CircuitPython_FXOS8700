@@ -1,32 +1,32 @@
-# This is a common .travis.yml for generating library release zip files for
-# CircuitPython library releases using circuitpython-build-tools.
-# See https://github.com/adafruit/circuitpython-build-tools for detailed setup
-# instructions.
-
 dist: trusty
 sudo: false
 language: python
 python:
-    - "3.6"
-
+- '3.6'
 cache:
-    pip: true
-
+  pip: true
 deploy:
-  provider: releases
-  api_key: $GITHUB_TOKEN
+- provider: releases
+  api_key: "$GITHUB_TOKEN"
   file_glob: true
-  file: $TRAVIS_BUILD_DIR/bundles/*
+  file: "$TRAVIS_BUILD_DIR/bundles/*"
   skip_cleanup: true
   overwrite: true
   on:
     tags: true
-
+- provider: pypi
+  user: adafruit-travis
+  on:
+    tags: true
+  password:
+    secure: pVhTN80nv+/BP427ERFD4eFEaGNPaphHoY3t3olKHPHQWHqwjko4bLQSsee6zQdU4USfYHiH+6HiTw5Z5rBgHxuFKxX1MOYLPDU4mG0NRfB5+lMgEAKAWYoM6h/RIZEVHmLRLkTmR7Ai+KQvN66ArnV7NULZvgteYI4RxG4u7ZEB0nGxoFy4OKV096xar1A9Tc86LpkNZv9OzAEgytwDCw3FJwpQIJ4A8AtfU4xUbCMfvf+0oyWM7+dDnsleqdcwjvxhYJvbzaYZme2bFvWaH4rgLryVZ3FmaZb+/ph8F1FuPe0mfandjVq91IpcmFhgap9sIpJWpLTPMUpdfk2BUkYwDfpEywOStGWS16sGzXZcx1adeNeyJZ78sV4KD7NQ/oH9x1dvgehWE7j1+MB6fYLTaiZ1NjZfApf9zSwq7Za3q5NCn9p3DKgkfMZ/aB6DMG/d4cqcSHJH3FixXhbwsX8gHBYukHYD+crdhOGp1u/LqRZpfYxjtVsgbEi4VkyX7A1xqZL8VVN0nqHFnl2HND22eeZzKVMeqDGJC2x31SRFpnulCbdx1ldWjQf96nR4xB/6yXM02FN6w0eHpLd/+sm7usjyfhQ7qYz+VwlihMIHY5J29JykqwIdUej/V0M6zLmuIYYyM5rxKk6vmyNs2tEPK6fEzhNnh1P5sA+85C8=
 install:
-  - pip install pylint circuitpython-build-tools Sphinx sphinx-rtd-theme
-
+- pip install -r requirements.txt
+- pip install pylint circuitpython-build-tools Sphinx sphinx-rtd-theme
+- pip install --force-reinstall pylint==1.9.2
 script:
-  - pylint adafruit_fxos8700.py
-  - ([[ ! -d "examples" ]] || pylint --disable=missing-docstring,invalid-name examples/*.py)
-  - circuitpython-build-bundles --filename_prefix adafruit-circuitpython-fxos8700 --library_location .
-  - cd docs && sphinx-build -E -W -b html . _build/html
+- pylint adafruit_fxos8700.py
+- ([[ ! -d "examples" ]] || pylint --disable=missing-docstring,invalid-name examples/*.py)
+- circuitpython-build-bundles --filename_prefix adafruit-circuitpython-fxos8700 --library_location
+  .
+- cd docs && sphinx-build -E -W -b html . _build/html && cd ..

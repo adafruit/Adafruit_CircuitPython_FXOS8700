@@ -50,7 +50,7 @@ try:
 except ImportError:
     import struct
 
-import adafruit_bus_device.i2c_device as i2c_device
+import adafruit_bus_device.i2c_device as i2c_dev
 from micropython import const
 
 # Register addresses and other constants:
@@ -113,7 +113,7 @@ class FXOS8700:
                  accel_range=ACCEL_RANGE_2G):
         assert accel_range in (ACCEL_RANGE_2G, ACCEL_RANGE_4G, ACCEL_RANGE_8G)
         self._accel_range = accel_range
-        self._device = i2c_device.I2CDevice(i2c, address)
+        self._device = i2c_dev.I2CDevice(i2c, address)
         # Check for chip ID value.
         if self._read_u8(_FXOS8700_REGISTER_WHO_AM_I) != _FXOS8700_ID:
             raise RuntimeError('Failed to find FXOS8700, check wiring!')
