@@ -139,8 +139,8 @@ class FXOS8700:
         # Read an 8-bit unsigned value from the specified 8-bit address.
         with self._device as i2c:
             self._BUFFER[0] = address & 0xFF
-            i2c.write(self._BUFFER, end=1, stop=False)
-            i2c.readinto(self._BUFFER, end=1)
+            i2c.write_then_readinto(self._BUFFER, self._BUFFER,
+                                    out_end=1, in_end=1, stop=False)
         return self._BUFFER[0]
 
     def _write_u8(self, address, val):
@@ -163,8 +163,9 @@ class FXOS8700:
         # Read accelerometer data from sensor.
         with self._device as i2c:
             self._BUFFER[0] = _FXOS8700_REGISTER_OUT_X_MSB
-            i2c.write(self._BUFFER, end=1, stop=False)
-            i2c.readinto(self._BUFFER, end=6)
+            i2c.write_then_readinto(self._BUFFER, self._BUFFER,
+                                             out_end=1, in_end=6,
+                                             stop=False)
         accel_raw_x = struct.unpack_from('>H', self._BUFFER[0:2])[0]
         accel_raw_y = struct.unpack_from('>H', self._BUFFER[2:4])[0]
         accel_raw_z = struct.unpack_from('>H', self._BUFFER[4:6])[0]
@@ -177,8 +178,9 @@ class FXOS8700:
         # 16-bit signed data so struct parsing can handle it directly.
         with self._device as i2c:
             self._BUFFER[0] = _FXOS8700_REGISTER_MOUT_X_MSB
-            i2c.write(self._BUFFER, end=1, stop=False)
-            i2c.readinto(self._BUFFER, end=6)
+            i2c.write_then_readinto(self._BUFFER, self._BUFFER,
+                                             out_end=1, in_end=6,
+                                             stop=False)
         mag_raw_x = struct.unpack_from('>h', self._BUFFER[0:2])[0]
         mag_raw_y = struct.unpack_from('>h', self._BUFFER[2:4])[0]
         mag_raw_z = struct.unpack_from('>h', self._BUFFER[4:6])[0]
