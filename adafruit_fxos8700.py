@@ -53,6 +53,9 @@ except ImportError:
 import adafruit_bus_device.i2c_device as i2c_dev
 from micropython import const
 
+__version__ = "0.0.0-auto.0"
+__repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_FXOS8700.git"
+
 # Register addresses and other constants:
 # pylint: disable=bad-whitespace
 _FXOS8700_ADDRESS               = const(0x1F)   # 0011111
