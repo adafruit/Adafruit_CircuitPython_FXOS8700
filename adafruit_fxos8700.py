@@ -58,37 +58,37 @@ __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_FXOS8700.git"
 
 # Register addresses and other constants:
 # pylint: disable=bad-whitespace
-_FXOS8700_ADDRESS               = const(0x1F)   # 0011111
-_FXOS8700_ID                    = const(0xC7)   # 1100 0111
-_FXOS8700_REGISTER_STATUS       = const(0x00)
-_FXOS8700_REGISTER_OUT_X_MSB    = const(0x01)
-_FXOS8700_REGISTER_OUT_X_LSB    = const(0x02)
-_FXOS8700_REGISTER_OUT_Y_MSB    = const(0x03)
-_FXOS8700_REGISTER_OUT_Y_LSB    = const(0x04)
-_FXOS8700_REGISTER_OUT_Z_MSB    = const(0x05)
-_FXOS8700_REGISTER_OUT_Z_LSB    = const(0x06)
-_FXOS8700_REGISTER_WHO_AM_I     = const(0x0D)   # 11000111   r
+_FXOS8700_ADDRESS = const(0x1F)  # 0011111
+_FXOS8700_ID = const(0xC7)  # 1100 0111
+_FXOS8700_REGISTER_STATUS = const(0x00)
+_FXOS8700_REGISTER_OUT_X_MSB = const(0x01)
+_FXOS8700_REGISTER_OUT_X_LSB = const(0x02)
+_FXOS8700_REGISTER_OUT_Y_MSB = const(0x03)
+_FXOS8700_REGISTER_OUT_Y_LSB = const(0x04)
+_FXOS8700_REGISTER_OUT_Z_MSB = const(0x05)
+_FXOS8700_REGISTER_OUT_Z_LSB = const(0x06)
+_FXOS8700_REGISTER_WHO_AM_I = const(0x0D)  # 11000111   r
 _FXOS8700_REGISTER_XYZ_DATA_CFG = const(0x0E)
-_FXOS8700_REGISTER_CTRL_REG1    = const(0x2A)   # 00000000   r/w
-_FXOS8700_REGISTER_CTRL_REG2    = const(0x2B)   # 00000000   r/w
-_FXOS8700_REGISTER_CTRL_REG3    = const(0x2C)   # 00000000   r/w
-_FXOS8700_REGISTER_CTRL_REG4    = const(0x2D)   # 00000000   r/w
-_FXOS8700_REGISTER_CTRL_REG5    = const(0x2E)   # 00000000   r/w
-_FXOS8700_REGISTER_MSTATUS      = const(0x32)
-_FXOS8700_REGISTER_MOUT_X_MSB   = const(0x33)
-_FXOS8700_REGISTER_MOUT_X_LSB   = const(0x34)
-_FXOS8700_REGISTER_MOUT_Y_MSB   = const(0x35)
-_FXOS8700_REGISTER_MOUT_Y_LSB   = const(0x36)
-_FXOS8700_REGISTER_MOUT_Z_MSB   = const(0x37)
-_FXOS8700_REGISTER_MOUT_Z_LSB   = const(0x38)
-_FXOS8700_REGISTER_MCTRL_REG1   = const(0x5B)   # 00000000   r/w
-_FXOS8700_REGISTER_MCTRL_REG2   = const(0x5C)   # 00000000   r/w
-_FXOS8700_REGISTER_MCTRL_REG3   = const(0x5D)   # 00000000   r/w
-_ACCEL_MG_LSB_2G                = 0.000244
-_ACCEL_MG_LSB_4G                = 0.000488
-_ACCEL_MG_LSB_8G                = 0.000976
-_MAG_UT_LSB                     = 0.1
-_SENSORS_GRAVITY_STANDARD       = 9.80665
+_FXOS8700_REGISTER_CTRL_REG1 = const(0x2A)  # 00000000   r/w
+_FXOS8700_REGISTER_CTRL_REG2 = const(0x2B)  # 00000000   r/w
+_FXOS8700_REGISTER_CTRL_REG3 = const(0x2C)  # 00000000   r/w
+_FXOS8700_REGISTER_CTRL_REG4 = const(0x2D)  # 00000000   r/w
+_FXOS8700_REGISTER_CTRL_REG5 = const(0x2E)  # 00000000   r/w
+_FXOS8700_REGISTER_MSTATUS = const(0x32)
+_FXOS8700_REGISTER_MOUT_X_MSB = const(0x33)
+_FXOS8700_REGISTER_MOUT_X_LSB = const(0x34)
+_FXOS8700_REGISTER_MOUT_Y_MSB = const(0x35)
+_FXOS8700_REGISTER_MOUT_Y_LSB = const(0x36)
+_FXOS8700_REGISTER_MOUT_Z_MSB = const(0x37)
+_FXOS8700_REGISTER_MOUT_Z_LSB = const(0x38)
+_FXOS8700_REGISTER_MCTRL_REG1 = const(0x5B)  # 00000000   r/w
+_FXOS8700_REGISTER_MCTRL_REG2 = const(0x5C)  # 00000000   r/w
+_FXOS8700_REGISTER_MCTRL_REG3 = const(0x5D)  # 00000000   r/w
+_ACCEL_MG_LSB_2G = 0.000244
+_ACCEL_MG_LSB_4G = 0.000488
+_ACCEL_MG_LSB_8G = 0.000976
+_MAG_UT_LSB = 0.1
+_SENSORS_GRAVITY_STANDARD = 9.80665
 # pylint: enable=bad-whitespace
 
 # User-facing constants/module-level globals:
@@ -107,19 +107,19 @@ def _twos_comp(val, bits):
 
 class FXOS8700:
     """Driver for the NXP FXOS8700 accelerometer and magnetometer."""
+
     # Class-level buffer for reading and writing data with the sensor.
     # This reduces memory allocations but means the code is not re-entrant or
     # thread safe!
     _BUFFER = bytearray(13)
 
-    def __init__(self, i2c, address=_FXOS8700_ADDRESS,
-                 accel_range=ACCEL_RANGE_2G):
+    def __init__(self, i2c, address=_FXOS8700_ADDRESS, accel_range=ACCEL_RANGE_2G):
         assert accel_range in (ACCEL_RANGE_2G, ACCEL_RANGE_4G, ACCEL_RANGE_8G)
         self._accel_range = accel_range
         self._device = i2c_dev.I2CDevice(i2c, address)
         # Check for chip ID value.
         if self._read_u8(_FXOS8700_REGISTER_WHO_AM_I) != _FXOS8700_ID:
-            raise RuntimeError('Failed to find FXOS8700, check wiring!')
+            raise RuntimeError("Failed to find FXOS8700, check wiring!")
         # Set to standby mode (required to make changes to this register)
         self._write_u8(_FXOS8700_REGISTER_CTRL_REG1, 0)
         if accel_range == ACCEL_RANGE_2G:
@@ -142,8 +142,7 @@ class FXOS8700:
         # Read an 8-bit unsigned value from the specified 8-bit address.
         with self._device as i2c:
             self._BUFFER[0] = address & 0xFF
-            i2c.write_then_readinto(self._BUFFER, self._BUFFER,
-                                    out_end=1, in_end=1)
+            i2c.write_then_readinto(self._BUFFER, self._BUFFER, out_end=1, in_end=1)
         return self._BUFFER[0]
 
     def _write_u8(self, address, val):
@@ -166,11 +165,10 @@ class FXOS8700:
         # Read accelerometer data from sensor.
         with self._device as i2c:
             self._BUFFER[0] = _FXOS8700_REGISTER_OUT_X_MSB
-            i2c.write_then_readinto(self._BUFFER, self._BUFFER,
-                                    out_end=1, in_end=6)
-        accel_raw_x = struct.unpack_from('>H', self._BUFFER[0:2])[0]
-        accel_raw_y = struct.unpack_from('>H', self._BUFFER[2:4])[0]
-        accel_raw_z = struct.unpack_from('>H', self._BUFFER[4:6])[0]
+            i2c.write_then_readinto(self._BUFFER, self._BUFFER, out_end=1, in_end=6)
+        accel_raw_x = struct.unpack_from(">H", self._BUFFER[0:2])[0]
+        accel_raw_y = struct.unpack_from(">H", self._BUFFER[2:4])[0]
+        accel_raw_z = struct.unpack_from(">H", self._BUFFER[4:6])[0]
         # Convert accelerometer data to signed 14-bit value from 16-bit
         # left aligned 2's compliment value.
         accel_raw_x = _twos_comp(accel_raw_x >> 2, 14)
@@ -180,13 +178,14 @@ class FXOS8700:
         # 16-bit signed data so struct parsing can handle it directly.
         with self._device as i2c:
             self._BUFFER[0] = _FXOS8700_REGISTER_MOUT_X_MSB
-            i2c.write_then_readinto(self._BUFFER, self._BUFFER,
-                                    out_end=1, in_end=6)
-        mag_raw_x = struct.unpack_from('>h', self._BUFFER[0:2])[0]
-        mag_raw_y = struct.unpack_from('>h', self._BUFFER[2:4])[0]
-        mag_raw_z = struct.unpack_from('>h', self._BUFFER[4:6])[0]
-        return ((accel_raw_x, accel_raw_y, accel_raw_z),
-                (mag_raw_x, mag_raw_y, mag_raw_z))
+            i2c.write_then_readinto(self._BUFFER, self._BUFFER, out_end=1, in_end=6)
+        mag_raw_x = struct.unpack_from(">h", self._BUFFER[0:2])[0]
+        mag_raw_y = struct.unpack_from(">h", self._BUFFER[2:4])[0]
+        mag_raw_z = struct.unpack_from(">h", self._BUFFER[4:6])[0]
+        return (
+            (accel_raw_x, accel_raw_y, accel_raw_z),
+            (mag_raw_x, mag_raw_y, mag_raw_z),
+        )
 
     @property
     def accelerometer(self):
