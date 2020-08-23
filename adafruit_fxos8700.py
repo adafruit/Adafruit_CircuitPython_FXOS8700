@@ -57,7 +57,6 @@ __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_FXOS8700.git"
 
 # Register addresses and other constants:
-# pylint: disable=bad-whitespace
 _FXOS8700_ADDRESS = const(0x1F)  # 0011111
 _FXOS8700_ID = const(0xC7)  # 1100 0111
 _FXOS8700_REGISTER_STATUS = const(0x00)
@@ -89,7 +88,6 @@ _ACCEL_MG_LSB_4G = 0.000488
 _ACCEL_MG_LSB_8G = 0.000976
 _MAG_UT_LSB = 0.1
 _SENSORS_GRAVITY_STANDARD = 9.80665
-# pylint: enable=bad-whitespace
 
 # User-facing constants/module-level globals:
 ACCEL_RANGE_2G = 0x00
