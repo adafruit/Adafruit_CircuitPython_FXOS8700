@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 # Simple demo of the FXOS8700 accelerometer and magnetometer.
 # Will print the acceleration and magnetometer values every second.
 import time

@@ -1,24 +1,7 @@
-# The MIT License (MIT)
+# SPDX-FileCopyrightText: 2017 Tony DiCola for Adafruit Industries
 #
-# Copyright (c) 2017 Tony DiCola for Adafruit Industries
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
+# SPDX-License-Identifier: MIT
+
 """
 `adafruit_fxos8700`
 ====================================================
@@ -188,7 +171,7 @@ class FXOS8700:
     @property
     def accelerometer(self):
         """Read the acceleration from the accelerometer and return its X, Y, Z axis values as a
-           3-tuple in m/s^2.
+        3-tuple in m/s^2.
         """
         accel_raw, _ = self.read_raw_accel_mag()
         # Convert accel values to m/s^2
@@ -203,7 +186,8 @@ class FXOS8700:
 
     @property
     def magnetometer(self):
-        """Read the magnetometer values and return its X, Y, Z axis values as a 3-tuple in uTeslas.
+        """
+        Read the magnetometer values and return its X, Y, Z axis values as a 3-tuple in uTeslas.
         """
         _, mag_raw = self.read_raw_accel_mag()
         # Convert mag values to uTesla
