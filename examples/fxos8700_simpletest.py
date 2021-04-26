@@ -4,15 +4,12 @@
 # Simple demo of the FXOS8700 accelerometer and magnetometer.
 # Will print the acceleration and magnetometer values every second.
 import time
-
 import board
-import busio
-
 import adafruit_fxos8700
 
 
-# Initialize I2C bus and device.
-i2c = busio.I2C(board.SCL, board.SDA)
+# Create sensor object, communicating over the board's default I2C bus
+i2c = board.I2C()
 sensor = adafruit_fxos8700.FXOS8700(i2c)
 # Optionally create the sensor with a different accelerometer range (the
 # default is 2G, but you can use 4G or 8G values):

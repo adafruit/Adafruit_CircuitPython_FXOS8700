@@ -23,8 +23,8 @@ Implementation Notes
 
 **Software and Dependencies:**
 
-* Adafruit CircuitPython firmware (2.2.0+) for the ESP8622 and M0-based boards:
-  https://github.com/adafruit/circuitpython/releases
+* Adafruit CircuitPython firmware for the supported boards:
+  https://circuitpython.org/downloads
 
 * Adafruit's Bus Device library: https://github.com/adafruit/Adafruit_CircuitPython_BusDevice
 """
@@ -87,7 +87,38 @@ def _twos_comp(val, bits):
 
 
 class FXOS8700:
-    """Driver for the NXP FXOS8700 accelerometer and magnetometer."""
+    """Driver for the NXP FXOS8700 accelerometer and magnetometer.
+
+    :param ~busio.I2C i2c: The I2C bus the device is connected to
+    :param int address: The I2C device address. Defaults to :const:`0x1F`
+    :param int accel_range: Device range. Defaults to :const:`0x00`.
+
+
+    **Quickstart: Importing and using the device**
+
+        Here is an example of using the :class:`FXOS8700` class.
+        First you will need to import the libraries to use the sensor
+
+        .. code-block:: python
+
+            import board
+            import adafruit_fxos8700
+
+        Once this is done you can define your `board.I2C` object and define your sensor object
+
+        .. code-block:: python
+
+            i2c = board.I2C()  # uses board.SCL and board.SDA
+            sensor = adafruit_fxos8700.FXOS8700(i2c)
+
+        Now you have access to the :attr:`accelerometer` and :attr:`magnetometer` attributes
+
+        .. code-block:: python
+
+            accel_x, accel_y, accel_z = sensor.accelerometer
+            mag_x, mag_y, mag_z = sensor.magnetometer
+
+    """
 
     # Class-level buffer for reading and writing data with the sensor.
     # This reduces memory allocations but means the code is not re-entrant or
@@ -171,7 +202,7 @@ class FXOS8700:
     @property
     def accelerometer(self):
         """Read the acceleration from the accelerometer and return its X, Y, Z axis values as a
-        3-tuple in m/s^2.
+        3-tuple in :math:`m/s^2`.
         """
         accel_raw, _ = self.read_raw_accel_mag()
         # Convert accel values to m/s^2
@@ -187,7 +218,7 @@ class FXOS8700:
     @property
     def magnetometer(self):
         """
-        Read the magnetometer values and return its X, Y, Z axis values as a 3-tuple in uTeslas.
+        Read the magnetometer values and return its X, Y, Z axis values as a 3-tuple in μTeslas.
         """
         _, mag_raw = self.read_raw_accel_mag()
         # Convert mag values to uTesla

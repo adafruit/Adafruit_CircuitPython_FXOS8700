@@ -23,6 +23,8 @@ Table of Contents
 .. toctree::
     :caption: Tutorials
 
+    Adafruit Precision NXP 9-DOF Breakout Board - FXOS8700 + FXAS21002 Learning Guide <https://learn.adafruit.com/nxp-precision-9dof-breakout/overview>
+
 .. toctree::
     :caption: Related Products
 
