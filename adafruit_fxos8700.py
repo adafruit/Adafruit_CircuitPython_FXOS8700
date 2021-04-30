@@ -18,7 +18,7 @@ Implementation Notes
 
 **Hardware:**
 
-*  Adafruit `Precision NXP 9-DOF Breakout Board - FXOS8700 + FXAS21002
+*  `Adafruit Precision NXP 9-DOF Breakout Board - FXOS8700 + FXAS21002
    <https://www.adafruit.com/product/3463>`_ (Product ID: 3463)
 
 **Software and Dependencies:**
@@ -26,7 +26,8 @@ Implementation Notes
 * Adafruit CircuitPython firmware for the supported boards:
   https://circuitpython.org/downloads
 
-* Adafruit's Bus Device library: https://github.com/adafruit/Adafruit_CircuitPython_BusDevice
+* Adafruit's Bus Device library:
+  https://github.com/adafruit/Adafruit_CircuitPython_BusDevice
 """
 try:
     import ustruct as struct
@@ -126,7 +127,8 @@ class FXOS8700:
     _BUFFER = bytearray(13)
 
     def __init__(self, i2c, address=_FXOS8700_ADDRESS, accel_range=ACCEL_RANGE_2G):
-        assert accel_range in (ACCEL_RANGE_2G, ACCEL_RANGE_4G, ACCEL_RANGE_8G)
+        if accel_range not in (ACCEL_RANGE_2G, ACCEL_RANGE_4G, ACCEL_RANGE_8G):
+            raise Exception("accel_range selected is not a valid option")
         self._accel_range = accel_range
         self._device = i2c_dev.I2CDevice(i2c, address)
         # Check for chip ID value.
