@@ -60,7 +60,7 @@ Usage Example
     import board
     import adafruit_fxos8700
 
-    i2c = board.I2C()
+    i2c = board.I2C()  # uses board.SCL and board.SDA
     sensor = adafruit_fxos8700.FXOS8700(i2c)
 
     while True:

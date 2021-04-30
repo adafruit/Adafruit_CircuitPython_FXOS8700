@@ -9,7 +9,7 @@ import adafruit_fxos8700
 
 
 # Create sensor object, communicating over the board's default I2C bus
-i2c = board.I2C()
+i2c = board.I2C()  # uses board.SCL and board.SDA
 sensor = adafruit_fxos8700.FXOS8700(i2c)
 # Optionally create the sensor with a different accelerometer range (the
 # default is 2G, but you can use 4G or 8G values):
