@@ -70,6 +70,11 @@ Usage Example
         print('Magnetometer (uTesla): ({0:0.3f}, {1:0.3f}, {2:0.3f})'.format(mag_x, mag_y, mag_z))
         time.sleep(1.0)
 
+Documentation
+=============
+
+API documentation for this library can be found on `Read the Docs <https://circuitpython.readthedocs.io/projects/fxos8700/en/latest/>`_.
+
 Contributing
 ============
 
