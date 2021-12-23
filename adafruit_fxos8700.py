@@ -29,10 +29,7 @@ Implementation Notes
 * Adafruit's Bus Device library:
   https://github.com/adafruit/Adafruit_CircuitPython_BusDevice
 """
-try:
-    import ustruct as struct
-except ImportError:
-    import struct
+import struct
 
 import adafruit_bus_device.i2c_device as i2c_dev
 from micropython import const
