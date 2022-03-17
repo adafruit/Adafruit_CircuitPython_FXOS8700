@@ -34,6 +34,12 @@ import struct
 import adafruit_bus_device.i2c_device as i2c_dev
 from micropython import const
 
+try:
+    from typing import Tuple, List
+    from busio import I2C
+except ImportError:
+    pass
+
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_FXOS8700.git"
 
@@ -76,7 +82,7 @@ ACCEL_RANGE_4G = 0x01
 ACCEL_RANGE_8G = 0x02
 
 
-def _twos_comp(val, bits):
+def _twos_comp(val: int, bits: int) -> int:
     # Convert an unsigned integer in 2's compliment form of the specified bit
     # length to its signed integer value and return it.
     if val & (1 << (bits - 1)) != 0:
@@ -123,7 +129,12 @@ class FXOS8700:
     # thread safe!
     _BUFFER = bytearray(13)
 
-    def __init__(self, i2c, address=_FXOS8700_ADDRESS, accel_range=ACCEL_RANGE_2G):
+    def __init__(
+        self,
+        i2c: I2C,
+        address: int = _FXOS8700_ADDRESS,
+        accel_range: int = ACCEL_RANGE_2G,
+    ) -> None:
         if accel_range not in (ACCEL_RANGE_2G, ACCEL_RANGE_4G, ACCEL_RANGE_8G):
             raise Exception("accel_range selected is not a valid option")
         self._accel_range = accel_range
@@ -149,21 +160,21 @@ class FXOS8700:
         # Jump to reg 0x33 after reading 0x06
         self._write_u8(_FXOS8700_REGISTER_MCTRL_REG2, 0x20)
 
-    def _read_u8(self, address):
+    def _read_u8(self, address: int) -> int:
         # Read an 8-bit unsigned value from the specified 8-bit address.
         with self._device as i2c:
             self._BUFFER[0] = address & 0xFF
             i2c.write_then_readinto(self._BUFFER, self._BUFFER, out_end=1, in_end=1)
         return self._BUFFER[0]
 
-    def _write_u8(self, address, val):
+    def _write_u8(self, address: int, val: int) -> None:
         # Write an 8-bit unsigned value to the specified 8-bit address.
         with self._device as i2c:
             self._BUFFER[0] = address & 0xFF
             self._BUFFER[1] = val & 0xFF
             i2c.write(self._BUFFER, end=2)
 
-    def read_raw_accel_mag(self):
+    def read_raw_accel_mag(self) -> Tuple[Tuple[int, int, int], Tuple[int, int, int]]:
         """Read the raw accelerometer and magnetometer readings.  Returns a
         2-tuple of 3-tuples:
 
@@ -199,9 +210,9 @@ class FXOS8700:
         )
 
     @property
-    def accelerometer(self):
+    def accelerometer(self) -> List[float]:
         """Read the acceleration from the accelerometer and return its X, Y, Z axis values as a
-        3-tuple in :math:`m/s^2`.
+        list of length 3 in :math:`m/s^2`.
         """
         accel_raw, _ = self.read_raw_accel_mag()
         # Convert accel values to m/s^2
@@ -215,9 +226,10 @@ class FXOS8700:
         return [x * factor * _SENSORS_GRAVITY_STANDARD for x in accel_raw]
 
     @property
-    def magnetometer(self):
+    def magnetometer(self) -> List[float]:
         """
-        Read the magnetometer values and return its X, Y, Z axis values as a 3-tuple in μTeslas.
+        Read the magnetometer values and return its X, Y, Z axis values as a list of length 3
+        in μTeslas.
         """
         _, mag_raw = self.read_raw_accel_mag()
         # Convert mag values to uTesla
