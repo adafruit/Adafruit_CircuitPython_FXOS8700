@@ -136,7 +136,7 @@ class FXOS8700:
         accel_range: int = ACCEL_RANGE_2G,
     ) -> None:
         if accel_range not in (ACCEL_RANGE_2G, ACCEL_RANGE_4G, ACCEL_RANGE_8G):
-            raise Exception("accel_range selected is not a valid option")
+            raise ValueError("accel_range selected is not a valid option")
         self._accel_range = accel_range
         self._device = i2c_dev.I2CDevice(i2c, address)
         # Check for chip ID value.
