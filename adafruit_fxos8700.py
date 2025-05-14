@@ -29,13 +29,15 @@ Implementation Notes
 * Adafruit's Bus Device library:
   https://github.com/adafruit/Adafruit_CircuitPython_BusDevice
 """
+
 import struct
 
 import adafruit_bus_device.i2c_device as i2c_dev
 from micropython import const
 
 try:
-    from typing import Tuple, List
+    from typing import List, Tuple
+
     from busio import I2C
 except ImportError:
     pass
@@ -135,7 +137,7 @@ class FXOS8700:
         address: int = _FXOS8700_ADDRESS,
         accel_range: int = ACCEL_RANGE_2G,
     ) -> None:
-        if accel_range not in (ACCEL_RANGE_2G, ACCEL_RANGE_4G, ACCEL_RANGE_8G):
+        if accel_range not in {ACCEL_RANGE_2G, ACCEL_RANGE_4G, ACCEL_RANGE_8G}:
             raise ValueError("accel_range selected is not a valid option")
         self._accel_range = accel_range
         self._device = i2c_dev.I2CDevice(i2c, address)

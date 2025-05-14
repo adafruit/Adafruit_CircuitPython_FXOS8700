@@ -4,9 +4,10 @@
 # Simple demo of the FXOS8700 accelerometer and magnetometer.
 # Will print the acceleration and magnetometer values every second.
 import time
-import board
-import adafruit_fxos8700
 
+import board
+
+import adafruit_fxos8700
 
 # Create sensor object, communicating over the board's default I2C bus
 i2c = board.I2C()  # uses board.SCL and board.SDA
@@ -24,15 +25,7 @@ while True:
     accel_x, accel_y, accel_z = sensor.accelerometer
     mag_x, mag_y, mag_z = sensor.magnetometer
     # Print values.
-    print(
-        "Acceleration (m/s^2): ({0:0.3f}, {1:0.3f}, {2:0.3f})".format(
-            accel_x, accel_y, accel_z
-        )
-    )
-    print(
-        "Magnetometer (uTesla): ({0:0.3f}, {1:0.3f}, {2:0.3f})".format(
-            mag_x, mag_y, mag_z
-        )
-    )
+    print(f"Acceleration (m/s^2): ({accel_x:0.3f}, {accel_y:0.3f}, {accel_z:0.3f})")
+    print(f"Magnetometer (uTesla): ({mag_x:0.3f}, {mag_y:0.3f}, {mag_z:0.3f})")
     # Delay for a second.
     time.sleep(1.0)
